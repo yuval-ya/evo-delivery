@@ -1,20 +1,29 @@
 import random
-from config import LETTERS, EXPECTED_RESULT
 from pyeasyga import pyeasyga
+import string
+
+EXPECTED_RESULT = "hello world"
+LETTERS = list(string.ascii_lowercase) + \
+    list(string.whitespace)  # list(string.printable)
+
+DEFAULT_CONFIG = {
+    "seed_data": [],
+    "population_size": 100,
+    "generations": 1000,
+    "crossover_probability": 0.8,
+    "mutation_probability": 0.2,
+    "elitism": True,
+    "maximise_fitness": True
+}
 
 
-class EvoDeliveryEa():
-    config = {
-        "seed_data": [],
-        "population_size": 100,
-        "generations": 1000,
-        "crossover_probability": 0.8,
-        "mutation_probability": 0.2,
-        "elitism": True,
-        "maximise_fitness": True
-    }
+class HelloWorldEa():
+    expected_result = [c for c in EXPECTED_RESULT]
 
-    def __init__(self):
+    def __init__(self, expected_result=EXPECTED_RESULT, config=DEFAULT_CONFIG):
+        self.config = config
+        expected_result = EXPECTED_RESULT if expected_result is None else expected_result
+        HelloWorldEa.expected_result = [c for c in expected_result]
         self.ga = pyeasyga.GeneticAlgorithm(seed_data=self.config["seed_data"],
                                             population_size=self.config["population_size"],
                                             generations=self.config["generations"],
@@ -32,6 +41,9 @@ class EvoDeliveryEa():
     def run(self):
         self.ga.run()
 
+    def result(self):
+        return {"best_individual": self.ga.best_individual(), "expected result": self.expected_result}
+
     def best_individual(self):
         return self.ga.best_individual()
 
@@ -40,7 +52,7 @@ class EvoDeliveryEa():
 
     @staticmethod
     def create_individual(data):
-        return [random.choice(LETTERS) for _ in range(11)]
+        return [random.choice(LETTERS) for _ in range(len(HelloWorldEa.expected_result))]
 
     @staticmethod
     def crossover(parent_1, parent_2):
@@ -62,7 +74,7 @@ class EvoDeliveryEa():
     def fitness(individual, data):
         fitness = 0
 
-        for c1, c2 in zip(individual, EXPECTED_RESULT):
+        for c1, c2 in zip(individual, HelloWorldEa.expected_result):
             if c1 == c2:
                 fitness += 1
         return fitness
