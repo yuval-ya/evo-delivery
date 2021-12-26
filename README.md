@@ -20,7 +20,7 @@ The problem is – Find the most optimistic routing of N drivers to M deliveries
 
 ### The system's main components
 
-![EvoDelivery - The system's main components](https://user-images.githubusercontent.com/65215909/145464655-2eae4df5-ba6e-415e-a8a3-68c09953bfca.png)
+![EvoDelivery - The system's main components](https://user-images.githubusercontent.com/57661886/147407380-993f5385-3f87-4df0-9abb-ac30582319bc.png)
 
 ### Technology Stack:
 - Front-End: React
